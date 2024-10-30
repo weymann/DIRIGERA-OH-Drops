@@ -1,4 +1,4 @@
-# Dirigera Binding
+# DIRIGERA Binding
 
 Binding supporting the DIRIGERA Gateway from Ikea. 
 
@@ -13,30 +13,30 @@ The DIRIGERA `bridge` is providing the connection to all devices and scenes.
 
 Refer to below sections which devices are supported and are covered by `things` connected to the DIRIGERA bridge.
 
-| ThingTypeUUID       | Description                                                | Tested       | Section                        | Products                                  |
-|---------------------|------------------------------------------------------------|--------------|--------------------------------|-------------------------------------------|
-| gateway             | Ikea Gateway for smart products                            | personally   | [Gateway](#gateway-brdige)     | DIRIGERA                                  |
-| air-purifier        | Air cleaning device with particle filter                   | no           | [Air Purifier](#air-purifier)  | STARKVIND                                 |
-| air-quality         | Air measure for temperature, humidity and particles        | no           | [Blinds](#blinds)              | VINDSTYRKA, VINDRIKTNING                  |
-| blind               | Window or door blind                                       | no           |                                | PRAKTLYSING ,KADRILJ ,FRYKTUR, TREDANSEN  |
-| blind-controller    | Controller to open and close blinds                        | no           |                                | TRÅDFRI                                   |
-| dimmable-light      | Light with brightness support                              | no           | [Lights](#lights)              | TRÅDFRI                                   |
-| temperature-light   | Light with color temperature support                       | personally   | [Lights](#lights)              | TRÅDFRI, FLOALT                           |
-| color-light         | Light with color support                                   | personally   | [Lights](#lights)              | TRÅDFRI, ORMANÅS                          |
-| light-controller    | LController to handle light attributes                     | personally   |                                | TRÅDFRI, RODRET,STYRBAAR                  |
-| motion-sensor       | Sensor detecting motion eventss                            | no           |                                | TRÅDFRI                                   |
-| motion-light-sensor | Sensor detecting motion events and measures light level    | personally   |                                | VALLHORN                                  |
-| single-shortcut     | Shortcut controller with one button                        | no           |                                | TRÅDFRI                                   |
-| double-shortcut     | Shortcut controller with two buttons                       | personally   |                                | SOMRIG                                    |
-| simple-plug         | Switchable power plug                                      | no           |                                | TRÅDFRI, ÅSKVÄDER                         |
-| power-plug          | Switchable power plug with status light and child lock     | personally   |                                | TRETAKT                                   |
-| smart-plug          | Switchable plug with electricity measurements              | personally   |                                | INSPELNING                                |
-| scene               | Scene which can be triggered                               | personally   |                                | -                                         |
-| speaker             | Speaker with player activities                             | personally   |                                | SYMFONISK                                 |
-| sound-controller    | Controller for speakers                                    | no           |                                | SYMFONISK, TRÅDFRI                        |
-| contact-sensor      | Sensor tracking if windows or doors are open               | personally   |                                | PARASOLL                                  |
-| water-sensor        | Sensor to detect water leaks                               | no           |                                | BADRING                                   |
-| repeater            | Repeater to strengthen signal                              | personally   |                                | TRÅDFRI                                   |
+| ThingTypeUUID         | Description                                                | Tested       | Section                        | Products                                  |
+|-----------------------|------------------------------------------------------------|--------------|--------------------------------|-------------------------------------------|
+| `gateway`             | Ikea Gateway for smart products                            | personally   | [Gateway](#gateway-brdige)     | DIRIGERA                                  |
+| `air-purifier`        | Air cleaning device with particle filter                   | no           | [Air Purifier](#air-purifier)  | STARKVIND                                 |
+| `air-quality`         | Air measure for temperature, humidity and particles        | no           |                                | VINDSTYRKA, VINDRIKTNING                  |
+| `blind `              | Window or door blind                                       | no           | [Blinds](#blinds)              | PRAKTLYSING ,KADRILJ ,FRYKTUR, TREDANSEN  |
+| `blind-controller`    | Controller to open and close blinds                        | no           |                                | TRÅDFRI                                   |
+| `dimmable-light`      | Light with brightness support                              | no           | [Lights](#lights)              | TRÅDFRI                                   |
+| `temperature-light`   | Light with color temperature support                       | personally   | [Lights](#lights)              | TRÅDFRI, FLOALT                           |
+| `color-light`         | Light with color support                                   | personally   | [Lights](#lights)              | TRÅDFRI, ORMANÅS                          |
+| `light-controller`    | LController to handle light attributes                     | personally   |                                | TRÅDFRI, RODRET,STYRBAAR                  |
+| `motion-sensor`       | Sensor detecting motion eventss                            | no           |                                | TRÅDFRI                                   |
+| `motion-light-sensor` | Sensor detecting motion events and measures light level    | personally   |                                | VALLHORN                                  |
+| `single-shortcut`     | Shortcut controller with one button                        | no           |                                | TRÅDFRI                                   |
+| `double-shortcut`     | Shortcut controller with two buttons                       | personally   |                                | SOMRIG                                    |
+| `simple-plug`         | Switchable power plug                                      | no           |                                | TRÅDFRI, ÅSKVÄDER                         |
+| `power-plug`          | Switchable power plug with status light and child lock     | personally   |                                | TRETAKT                                   |
+| `smart-plug`          | Switchable plug with electricity measurements              | personally   |                                | INSPELNING                                |
+| `scene`               | Scene which can be triggered                               | personally   |                                | -                                         |
+| `speaker`             | Speaker with player activities                             | personally   |                                | SYMFONISK                                 |
+| `sound-controller`    | Controller for speakers                                    | no           |                                | SYMFONISK, TRÅDFRI                        |
+| `contact-sensor`      | Sensor tracking if windows or doors are open               | personally   |                                | PARASOLL                                  |
+| `water-sensor`        | Sensor to detect water leaks                               | no           |                                | BADRING                                   |
+| `repeater`            | Repeater to strengthen signal                              | personally   |                                | TRÅDFRI                                   |
 
 ## Discovery
 
