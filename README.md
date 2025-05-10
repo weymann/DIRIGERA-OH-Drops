@@ -47,15 +47,11 @@ Devices connected to this bridge will be detected automatically unless you don't
 
 ### Bridge Configuration
 
-| Name            | Type    | Description                                                | Default | Required |
-|-----------------|---------|------------------------------------------------------------|---------|----------|
-| `ipAddress`     | text    | DIRIGERA IP Address                                        | N/A     | yes      |
-| `id`            | text    | Unique id of this gateway                                  | N/A     | no       |
-| `discovery`     | boolean | Configure if paired devices shall be detected by discovery | true    | no       |
-
-- `ipAddress` - use discovery to obtain this value automatically or enter it manually if known
-- `id` - will be detected automatically after successful pairing
-- `discovery` - will run continuously in the background and detect new, deleted or changed devices. Switch it off to deactivate discovery
+| Name            | Type    | Description                                                | Explanation                                                                          | Default | Required |
+|-----------------|---------|------------------------------------------------------------|--------------------------------------------------------------------------------------|---------|----------|
+| `ipAddress`     | text    | DIRIGERA IP Address                                        | Use discovery to obtain this value automatically or enter it manually if known       | N/A     | yes      |
+| `id`            | text    | Unique id of this gateway                                  | Detected automatically after successful pairing                                      | N/A     | no       |
+| `discovery`     | boolean | Configure if paired devices shall be detected by discovery | Run continuously in the background and detect new, deleted or changed devices        | true    | no       |
 
 ### Gateway Pairing
 
@@ -327,22 +323,24 @@ Channel `brightness` can receive
 
 Light with color temperature support.
 
-| Channel               | Type                  | Read/Write | Description                                          |
-|-----------------------|-----------------------|------------|------------------------------------------------------|
-| `power`               | Switch                | RW         | Power state of light                                 |
-| `brightness`          | Dimmer                | RW         | Control brightness of light                          |
-| `color-temperature`   | Dimmer                | RW         | Color temperature from cold (0 %) to warm (100 %)    |
+| Channel                   | Type                  | Read/Write | Description                                          | Advanced |
+|---------------------------|-----------------------|------------|------------------------------------------------------|----------|
+| `power`                   | Switch                | RW         | Power state of light                                 |          |
+| `brightness`              | Dimmer                | RW         | Control brightness of light                          |          |
+| `color-temperature`       | Dimmer                | RW         | Color temperature from cold (0 %) to warm (100 %)    |          |
+| `color-temperature-abs`   | Number:Temperature    | RW         | Color temperature of a bulb in Kelvin                |    X     |
 
 ## Color Lights
 
 Light with color support.
 
-| Channel               | Type                  | Read/Write | Description                                          |
-|-----------------------|-----------------------|------------|------------------------------------------------------|
-| `power`               | Switch                | RW         | Power state of light                                 |
-| `brightness`          | Dimmer                | RW         | Brightness of light in percent                       |
-| `color-temperature`   | Dimmer                | RW         | Color temperature from cold (0 %) to warm (100 %)    |
-| `color`               | Color                 | RW         | Color of light with hue, saturation and brightness   |
+| Channel                   | Type                  | Read/Write | Description                                          | Advanced |
+|---------------------------|-----------------------|------------|------------------------------------------------------|----------|
+| `power`                   | Switch                | RW         | Power state of light                                 |          |
+| `brightness`              | Dimmer                | RW         | Brightness of light in percent                       |          |
+| `color-temperature`       | Dimmer                | RW         | Color temperature from cold (0 %) to warm (100 %)    |          |
+| `color-temperature-abs`   | Number:Temperature    | RW         | Color temperature of a bulb in Kelvin                |          |
+| `color`                   | Color                 | RW         | Color of light with hue, saturation and brightness   |    X     |
 
 Channel `color` can receive
 
@@ -722,18 +720,18 @@ Number                      Table_Lamp_OTA_Status       { channel="dirigera:temp
 Number                      Table_Lamp_OTA_State        { channel="dirigera:temperature-light:myhome:living-room-bulb:ota-state" }
 Number                      Table_Lamp_OTA_Progress     { channel="dirigera:temperature-light:myhome:living-room-bulb:ota-progress" }
 
-Switch                      Dishwasher_Power_State      { channel="dirigera:smart-plug:myhome:dishwasher:power" }
-Switch                      Dishwasher_Child_lock       { channel="dirigera:smart-plug:myhome:dishwasher:child-lock" }
-Switch                      Dishwasher_Disable_Light    { channel="dirigera:smart-plug:myhome:dishwasher:disable-light" }
-Number:Power                Dishwasher_Power            { channel="dirigera:smart-plug:myhome:dishwasher:electric-power" }
-Number:Energy               Dishwasher_Energy_Total     { channel="dirigera:smart-plug:myhome:dishwasher:energy-total" }
-Number:Energy               Dishwasher_Energy_Reset     { channel="dirigera:smart-plug:myhome:dishwasher:energy-reset" }
-Number:ElectricCurrent      Dishwasher_Ampere           { channel="dirigera:smart-plug:myhome:dishwasher:electric-current" }
-Number:ElectricPotential    Dishwasher_Voltage          { channel="dirigera:smart-plug:myhome:dishwasher:electric-potential" }
-Number                      Dishwasher_Startup          { channel="dirigera:smart-plug:myhome:dishwasher:startup" }
-Number                      Dishwasher_OTA_Status       { channel="dirigera:smart-plug:myhome:dishwasher:ota-status" }
-Number                      Dishwasher_OTA_State        { channel="dirigera:smart-plug:myhome:dishwasher:ota-state" }
-Number                      Dishwasher_OTA_Progress     { channel="dirigera:smart-plug:myhome:dishwasher:ota-progress" }
+Switch                      Dishwasher_Power_State          { channel="dirigera:smart-plug:myhome:dishwasher:power" }
+Switch                      Dishwasher_Child_lock           { channel="dirigera:smart-plug:myhome:dishwasher:child-lock" }
+Switch                      Dishwasher_Disable_Status_Light { channel="dirigera:smart-plug:myhome:dishwasher:disable-status-light" }
+Number:Power                Dishwasher_Power                { channel="dirigera:smart-plug:myhome:dishwasher:electric-power" }
+Number:Energy               Dishwasher_Energy_Total         { channel="dirigera:smart-plug:myhome:dishwasher:energy-total" }
+Number:Energy               Dishwasher_Energy_Reset         { channel="dirigera:smart-plug:myhome:dishwasher:energy-reset" }
+Number:ElectricCurrent      Dishwasher_Ampere               { channel="dirigera:smart-plug:myhome:dishwasher:electric-current" }
+Number:ElectricPotential    Dishwasher_Voltage              { channel="dirigera:smart-plug:myhome:dishwasher:electric-potential" }
+Number                      Dishwasher_Startup              { channel="dirigera:smart-plug:myhome:dishwasher:startup" }
+Number                      Dishwasher_OTA_Status           { channel="dirigera:smart-plug:myhome:dishwasher:ota-status" }
+Number                      Dishwasher_OTA_State            { channel="dirigera:smart-plug:myhome:dishwasher:ota-state" }
+Number                      Dishwasher_OTA_Progress         { channel="dirigera:smart-plug:myhome:dishwasher:ota-progress" }
 ```
 
 ### Rule Examples
