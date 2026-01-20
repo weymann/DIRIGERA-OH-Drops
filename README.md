@@ -1,6 +1,6 @@
 # DIRIGERA Binding
 
-Binding supporting the DIRIGERA Gateway from IKEA. 
+Binding supporting the DIRIGERA Gateway from IKEA.
 
 ## Supported Things
 
@@ -34,12 +34,38 @@ Refer to below sections which devices are supported and are covered by `things` 
 | `repeater`            | Repeater to strengthen signal                              | [Repeater](#repeater)                     | TRÅDFRI                                   |
 | `scene`               | Scene from IKEA Home smart app which can be triggered      | [Scenes](#scenes)                         | -                                         |
 
+New products are based on Matter standard.
+If they are paired with the DIRIGERA gateway via IKEA home smart App they can be integrated with the folloing things.
+Each thing depends on the underlying hardware and channels are created based on the delivered values, e.g.
+
+- `ota` channels for devices which can receive updates
+- `battery` channels for battery powered devices
+- `link` channels if device can be linked to a controller or sensor
+- `startup` channel if device _power on_ behavior can be configured 
+
+Examples are MYGGSPRAY as `occupancy-sensor` which also provides a `light-sensor` or TIMMERFLOTTE as `environment-sensor` delivers temperature and humidity while ALPSTUGA also measures CO2 and particulate matter. 
+
+| ThingTypeUID          | Description                                               | Section                                   | Products                                  |
+|-----------------------|-----------------------------------------------------------|-------------------------------------------|-------------------------------------------|
+| `occupancy-sensor`    | Sensor to detect motion. Maybe combined with light-sensor | [Sensors](#occupancy-sensor)              | MYSPRAY                                   |
+| `light-sensor`        | Sensor providing illuminance measures                     | [Sensors](#light-sensor)                  | included in MYGGSPRAY                     |
+| `environment-sensor`  | Sensor measuring temperature, humidity and air quality    | [Sensors](#environment-sensor)            | TIMMERFLOTTE, ALPSTUGA                    |
+| `open-close-sensor`   | Sensor detecting open/closed doors, windows or drawers    | [Sensors](#open-close-sensor)             | MYGGBETT                                  |
+| `water-leak-sensor`   | Sensor detecting water leaks                              | [Sensors](#water-leak-sensor)             | KLIPPBOK                                  |
+| `two-button-switch`   | Controller with 2 programmable buttons                    | [Controller](#two-button-switch)          | BILRESA dual button                       |
+| `three-button-switch` | Controller with 3 programmable buttons                    | [Controller](#three-button-switch)        | BILRESA scroll wheel                      |
+| `matter-light`        | LED light (based on Matter standard)                      | [Lights](#matter-light)                   | KAJPLATS series                           |
+
 ## Discovery
 
-The discovery will try to identify your DIRIGERA Gateway. 
-This may take some time because your whole network is scanned in order to find it.
+The discovery will automatically detect your DIRIGERA Gateway via mDNS.
+If it cannot be found check your router for IP address.
+Manual scan isn't supported.
 
-**Before adding the bridge** read [Pairing section](#gateway-pairing).   
+After successful creation of DIRIGERA Gateway and pairing process connected devices are automatically added to your INBOX.
+You can switch off the automatic detection in [Bridge configuration](#bridge-configuration).
+
+**Before adding the bridge** read [Pairing section](#gateway-pairing).
 
 Devices connected to this bridge will be detected automatically unless you don't switch it off in [Bridge Configuration](#bridge-configuration)
 
@@ -60,10 +86,10 @@ You need physical access to the gateway to finish pairing so ensure you can reac
 
 Let's start pairing
 
-1. Add the bridge found in discovery 
-2. Pairing started automatically after creation!
-3. Press the button on the DIRIGERA rear side
-4. Your bridge shall switch to ONLINE 
+1. Add the bridge found in discovery
+1. Pairing started automatically after creation!
+1. Press the button on the DIRIGERA rear side
+1. Your bridge shall switch to ONLINE
 
 ### Gateway Channels
 
@@ -80,7 +106,7 @@ See [Gateway Limitations](#gateway-limitations) for further information.
 
 ### Follow Sun
 
-<img align="right" height="150" src="doc/follow-sun.png">
+![Follow Sun](doc/follow-sun.png)
 
 [Motion Sensors](#motion-sensor) can be active all the time or follow a schedule.
 One schedule is follow the sun which needs to be activated in the IKEA Home smart app in _Hub Settings_.
@@ -88,7 +114,7 @@ One schedule is follow the sun which needs to be activated in the IKEA Home smar
 ## Things
 
 With [DIRIGERA Gateway Bridge](#gateway-bridge) in place things can be connected as mentioned in the [supported things section](#supported-things).
-Things contain generic [configuration](), [properties]() and [channels]() according to their capabilities.
+Things contain generic configuration, properties and channels according to their capabilities.
 
 ### Generic Thing Configuration
 
@@ -103,15 +129,15 @@ Discovery will automatically identify the id.
 
 Each thing has properties attached for product information.
 It contains information of hardware and firmware version, device model and manufacturer.
-Device capabilities are listed in `canReceive` and `canSend`. 
+Device capabilities are listed in `canReceive` and `canSend`.
 
-<img align="center" width="500" src="doc/thing-properties.png">
+![Thing Properties](doc/thing-properties.png)
 
 ### Generic Thing Channels
 
 #### OTA Channels
 
-Over-the-Air (OTA) updates are common for many devices. 
+Over-the-Air (OTA) updates are common for many devices.
 If device is providing these channels is detected during runtime.
 
 | Channel         | Type      | Read/Write | Description                                  | Advanced |
@@ -123,7 +149,7 @@ If device is providing these channels is detected during runtime.
 `ota-status` shows the _overall status_ if your device is _up to date_ or an _update is available_.
 `ota-state` and `ota-progress` shows more detailed information which you may want to follow, that's why they are declared as advanced channels.
 
-**OTA Mappings**
+#### OTA Mappings
 
 Mappings for `ota-status`
 
@@ -152,10 +178,10 @@ The channels are declared advanced and can be used for setup procedure.
 
 | Channel               | Type                  | Read/Write | Description                                      | Advanced |
 |-----------------------|-----------------------|------------|--------------------------------------------------|----------|
-| `links`               | String                | RW         | Linked controllers and sensors                   |    X     |
+| `links`               | String                | RW         | Linked controllers, sensors and devices          |    X     |
 | `link-candidates`     | String                | RW         | Candidates which can be linked                   |    X     |
 
-<img align="right" width="300" src="doc/link-candidates.png">
+![Link Candidates](doc/link-candidates.png)
 
 Several devices can be linked together like
 
@@ -195,14 +221,13 @@ With this the light shall stay online.
 I wasn't able to reproduce this behavior.
 Maybe somebody has more success.
 
-
 `custom-name` is declared e.g. in your IKEA Home smart app.
 This name is reflected in the discovery and if thing is created this name will be the thing label.
 If `custom-name` is changed via openHAB API or a rule the label will not change.
 
 ### Unknown Devices
 
-Filter your traces regarding 'DIRIGERA MODEL Unsupported Device'. 
+Filter your traces regarding 'DIRIGERA MODEL Unsupported Device'.
 The trace contains a JSON object at the end which is needed to implement a corresponding handler.
 
 ## Air Purifier
@@ -247,7 +272,7 @@ Window or door blind.
 | `blind-level`         | Dimmer                | RW         | Current blind level                              |
 | `battery-level`       | Number:Dimensionless  | R          | Battery charge level in percent                  |
 
-#### Blind Channel Mappings
+### Blind Channel Mappings
 
 Mappings for `blind-state`
 
@@ -269,10 +294,10 @@ Configuration contains
 
 `fadeTime` adjust fading time according to your device.
 Current behavior shows commands are acknowledged while device is fading  but not executed correctly.
-So they need to be executed one after another. 
+So they need to be executed one after another.
 Maybe an update of the DIRIGERA gateway will change the current behavior and you can reduce them afterwards.
 
-`fadeSequence` is only for [Color Lights](#color-lights). 
+`fadeSequence` is only for [Color Lights](#color-lights).
 Through `hsb` channel it's possible to adapt color brightness at once.
 Again due to fading times they need to be executed in a sequence.
 You can choose between options
@@ -316,7 +341,7 @@ Light with brightness support.
 
 Channel `brightness` can receive
 
-- ON / OFF 
+- ON / OFF
 - numbers from 0 to 100 as percent where 0 will switch the light OFF, any other > 0 switches light ON
 
 ## Temperature Lights
@@ -344,7 +369,7 @@ Light with color support.
 
 Channel `color` can receive
 
-- ON / OFF 
+- ON / OFF
 - numbers from 0 to 100 as brightness in percent where 0 will switch the light OFF, any other > 0 switches light ON
 - triple values for hue, saturation, brightness
 
@@ -380,7 +405,7 @@ Smart plug like [Power Plug](#power-plug) plus measuring capability.
 | `energy-total`        | Number:Energy             | R          | Total energy consumption                     |
 | `energy-reset`        | Number:Energy             | R          | Energy consumption since last reset          |
 | `reset-date`          | DateTime                  | RW         | Date and time of last reset                  |
-| `electric-current`    | Number:ElectricCurrent    | R          | Electric current measured by plug            | 
+| `electric-current`    | Number:ElectricCurrent    | R          | Electric current measured by plug            |
 | `electric-voltage`    | Number:ElectricPotential  | R          | Electric potential of plug                   |
 
 Smart plug provides `energy-total` measuring energy consumption over lifetime and `energy-reset` measuring energy consumption from `reset-date` till now.
@@ -406,13 +431,13 @@ Sensor detecting motion events.
 | `light-preset`        | String                | RW         | Light presets for different times of the day     |
 
 When motion is detected via `motion` channel all connected devices from `links` channel will be active for the time configured in `active-duration`.
-Standard duration is seconds if raw number is sent as command. 
+Standard duration is seconds if raw number is sent as command.
 See [Motion Sensor Rules](#motion-sensor-rules) for further examples.
   
 Mappings for `schedule`
 
 - 0 : Always, sensor is always active
-- 1 : Follow sun, sensor gets active at sunset and deactivates at sunrise 
+- 1 : Follow sun, sensor gets active at sunset and deactivates at sunrise
 - 2 : Schedule, custom schedule with manual start and end time
 
 If option 1, follow sun is selected ensure you gave the permission in the IKEA Home smart app to use your GPS position to calculate times for sunrise and sunset.
@@ -457,7 +482,7 @@ Air measure for temperature, humidity and particles.
 | `particulate-matter`  | Number:Density        | R          | Category 2.5 particulate matter                      |
 | `voc-index`           | Number                | R          | Relative VOC intensity compared to recent history    |
 
-The VOC Index mimics the human nose’s perception of odors with a relative intensity compared to recent history. 
+The VOC Index mimics the human nose’s perception of odors with a relative intensity compared to recent history.
 The VOC Index is also sensitive to odorless VOCs, but it cannot discriminate between them.
 See more information in the [sensor description](https://sensirion.com/media/documents/02232963/6294E043/Info_Note_VOC_Index.pdf).
 
@@ -501,7 +526,7 @@ Controller to handle light attributes.
 | `battery-level`       | Number:Dimensionless  | R          | Battery charge level in percent              |
 | `light-preset`        | String                | RW         | Light presets for different times of the day |
 
-<img align="right" width="150" src="doc/light-presets.png">
+![Light Presets](doc/light-presets.png)
 
 Channel `light-preset` provides a JSON array with time an light settings for different times.
 If light is switched on by the controller the light attributes for the configured time section is used.
@@ -536,7 +561,7 @@ Controller for speakers.
 ## Speaker
 
 Speaker with player activities.
- 
+
 | Channel               | Type                  | Read/Write | Description                                  |
 |-----------------------|-----------------------|------------|----------------------------------------------|
 | `media-control`       | Player                | RW         | Media control  play, pause, next, previous   |
@@ -549,17 +574,17 @@ Speaker with player activities.
 | `image`               | RawType               | R          | Current playing track image                  |
 
 Channel `mute` should be writable but this isnn't the case now.
-See [Known Limitations](#speaker-limitations). 
+See [Known Limitations](#speaker-limitations).
 
 ## Repeater
 
 Repeater to strengthen signal.
-Sadly there's no further information like _signal strength_ available so only [OTA channels](#ota-channels) and [custom name](#other-channels) is available. 
- 
+Sadly there's no further information like _signal strength_ available so only [OTA channels](#ota-channels) and [custom name](#other-channels) is available.
+
 ## Scenes
 
 Scene from IKEA home smart app which can be triggered.
- 
+
 | Channel               | Type                  | Read/Write | Description                                  |
 |-----------------------|-----------------------|------------|----------------------------------------------|
 | `trigger`             | Number                | RW         | Trigger / undo scene execution               |
@@ -572,9 +597,112 @@ Two commands are defined:
 - 1 : Undo
 
 If command 0 (Trigger) is sent scene will be executed.
-There's a 30 seconds time slot to send command 1 (Undo). 
+There's a 30 seconds time slot to send command 1 (Undo).
 The countdown is updating `trigger` channel state which can be evaluated if an undo operation is still possible.
 State will switch to `Undef` after countdown.
+
+## Occupancy Sensor
+
+Sensor detecting motion events.
+
+| Channel               | Type                  | Read/Write | Description                                      |
+|-----------------------|-----------------------|------------|--------------------------------------------------|
+| `motion`              | Switch                | R          | Motion detected by the device                    |
+| `active-duration`     | Number:Time           | RW         | Keep connected devices active for this duration  |
+| `battery-level`       | Number:Dimensionless  | R          | Battery charge level in percent                  |
+| `schedule`            | Number                | RW         | Schedule when the sensor shall be active         |
+| `schedule-start`      | DateTime              | RW         | Start time of sensor activity                    |
+| `schedule-end`        | DateTime              | RW         | End time of sensor activity                      |
+
+## Light Sensor
+
+Sensor measuring illuminance.
+
+| Channel               | Type                  | Read/Write | Description                                  |
+|-----------------------|-----------------------|------------|----------------------------------------------|
+| `illuminance`         | Number:Illuminance    | R          | Illuminance in Lux                           |
+
+
+## Environment Sensor
+
+Environment measures for temperature, humidity and air quality.
+
+| Channel               | Type                  | Read/Write | Description                                          |
+|-----------------------|-----------------------|------------|------------------------------------------------------|
+| `temperature`         | Number:Temperature    | R          | Current indoor temperature                                     |
+| `humidity`            | Number:Dimensionless  | R          | Current atmospheric relative humidity                                         |
+| `particulate-matter`  | Number:Density        | R          | Category 2.5 particulate matter                      |
+| `co2`                 | Number:Dimensionless  | R          | CO₂ concentration    |
+
+## Open Close Sensor
+
+Sensor detecting open/closed doors, windows or drawers.
+
+| Channel               | Type                  | Read/Write | Description                                  |
+|-----------------------|-----------------------|------------|----------------------------------------------|
+| `contact`             | Contact               | R          | State if door or window is open or closed    |
+
+## Water Leak Sensor
+
+Sensor detecting water leaks.
+
+| Channel               | Type                  | Read/Write | Description                                  |
+|-----------------------|-----------------------|------------|----------------------------------------------|
+| `leak`                | Switch                | R          | Water leak detection                         |
+
+## Two Button Switch
+
+Controller with 2 programmable buttons
+
+| Channel               | Type                  | Read/Write | Description                                  | Advanced  |
+|-----------------------|-----------------------|------------|----------------------------------------------|-----------|
+| `top-button`          | Trigger               | R          | Press triggers for top button                |           |
+| `lower-button`        | Trigger               | R          | Press triggers for lower button              |           |
+| `control-mode`        | Number                | RW         | Select which device type shall be controlled |    X      |
+| `links`               | String                | RW         | Linked controllers, sensors and devices      |    X      |
+| `link-candidates`     | String                | RW         | Candidates which can be linked               |    X      |
+
+Trigger channels providing `SINGLE_PRESS`, `DOUBLE_PRESS` and `LONG_PRESS` as trigger values.
+The `control-mode` needs to be correct before linking other devices to the controller.
+
+## Three Button Switch
+
+Controller with 3 programmable buttons, BILRESA scroll wheel controller.
+There are 3 buttons covering scroll down, scroll up and press.
+In addition this controller provides switching between 3 groups.
+Group names are
+
+- `switch-1`, `switch-2` and `switch-3` for trigger and link channels
+- `switch` group covers general device information like `ota` and `battery` information 
+
+
+| Channel               | Type                  | Read/Write | Description                                  | Advanced  |
+|-----------------------|-----------------------|------------|----------------------------------------------|-----------|
+| `top-button`          | Trigger               | R          | Press triggers for top button                |           |
+| `lower-button`        | Trigger               | R          | Press triggers for lower button              |           |
+| `lower-button`        | Trigger               | R          | Press triggers for lower button              |           |
+| `control-mode`        | Number                | RW         | Select which device type shall be controlled |    X      |
+| `links`               | String                | RW         | Linked controllers, sensors and devices      |    X      |
+| `link-candidates`     | String                | RW         | Candidates which can be linked               |    X      |
+
+Pitfalls and problems:
+
+- be careful with _Add Equipment to Model_ and item names. Ensure item name for each group is different, otherwise item is connected to all group channels.
+- before linking the controller to other devices like lights ensure the `control-mode` fits 
+- right now triggers are **not** exposed so you cannot used them to control devices outside of DIRIGERA
+
+## Matter Light
+
+LED light (based on Matter standard).
+Channels are created based on the capabilities of the LED light.
+
+| Channel                   | Type                  | Read/Write | Description                                          | Advanced |
+|---------------------------|-----------------------|------------|------------------------------------------------------|----------|
+| `power`                   | Switch                | RW         | Power state of light                                 |          |
+| `brightness`              | Dimmer                | RW         | Brightness of light in percent                       |          |
+| `color-temperature`       | Dimmer                | RW         | Color temperature from cold (0 %) to warm (100 %)    |          |
+| `color-temperature-abs`   | Number:Temperature    | RW         | Color temperature of a bulb in Kelvin                |          |
+| `color`                   | Color                 | RW         | Color of light with hue, saturation and brightness   |    X     |
 
 ## Known Limitations
 
@@ -597,7 +725,7 @@ Debugging is essential for such a binding which supports many available products
 General debug messages will overflow traces and it's hard to find relevant information.
 To deal with these challenges commands for [openHAB console](https://www.openhab.org/docs/administration/console.html) are provided.
 
-```
+```shell
 Usage: openhab:dirigera token - Get token from DIRIGERA hub
 Usage: openhab:dirigera json [<deviceId> | all] - Print JSON data
 Usage: openhab:dirigera debug [<deviceId> | all] [true | false]  - Enable / disable detailed debugging for specific / all devices
@@ -607,14 +735,14 @@ Usage: openhab:dirigera debug [<deviceId> | all] [true | false]  - Enable / disa
 
 Prints the access token to communicate with DIRIGERA gateway as console output.
 
-```
+```shell
 console> openhab:dirigera token
 DIRIGERA Hub token: abcdef12345.......
 ```
 
 With token available you can test your devices e.g. via curl commands.
 
-```java
+```shell
 curl -X PATCH https://$YOUR_IP:8443/v1/devices/$DEVICE -H 'Authorization: Bearer $TOKEN' -H 'Content-Type: application/json' -d '[{"attributes":{"colorHue":280,"colorSaturation":1}}]' --insecure
 ```
 
@@ -629,7 +757,7 @@ Replace content in curl command with following variables:
 Get capabilities and current status for one `deviceId` or all devices.
 Output is shown on console as JSON String.
 
-```
+```shell
 console> openhab:dirigera json 3c8b0049-eb5c-4ea1-9da3-cdedc50366ef_1
 {"deviceType":"light","isReachable":true,"capabilities":{"canReceive":["customName","isOn","lightLevel","colorTemperature", ...}
 ```
@@ -639,9 +767,9 @@ console> openhab:dirigera json 3c8b0049-eb5c-4ea1-9da3-cdedc50366ef_1
 Enables or disables detailed logging for one `deviceId` or all devices.
 Answer is `Done` if command is successfully executed.
 If you operate with the device you can see requests and responses in openHAB Log Viewer.
-If device cannot be found answer is `Device Id xyz not found `.
- 
-```
+If device cannot be found answer is `Device Id xyz not found`.
+
+```shell
 console> openhab:dirigera debug all true
 Done
 ```
@@ -676,18 +804,18 @@ Number                      Table_Lamp_OTA_Status       { channel="dirigera:temp
 Number                      Table_Lamp_OTA_State        { channel="dirigera:temperature-light:myhome:living-room-bulb:ota-state" }
 Number                      Table_Lamp_OTA_Progress     { channel="dirigera:temperature-light:myhome:living-room-bulb:ota-progress" }
 
-Switch                      Dishwasher_Power_State          { channel="dirigera:smart-plug:myhome:dishwasher:power" }
-Switch                      Dishwasher_Child_lock           { channel="dirigera:smart-plug:myhome:dishwasher:child-lock" }
-Switch                      Dishwasher_Disable_Status_Light { channel="dirigera:smart-plug:myhome:dishwasher:disable-status-light" }
-Number:Power                Dishwasher_Power                { channel="dirigera:smart-plug:myhome:dishwasher:electric-power" }
-Number:Energy               Dishwasher_Energy_Total         { channel="dirigera:smart-plug:myhome:dishwasher:energy-total" }
-Number:Energy               Dishwasher_Energy_Reset         { channel="dirigera:smart-plug:myhome:dishwasher:energy-reset" }
-Number:ElectricCurrent      Dishwasher_Ampere               { channel="dirigera:smart-plug:myhome:dishwasher:electric-current" }
-Number:ElectricPotential    Dishwasher_Voltage              { channel="dirigera:smart-plug:myhome:dishwasher:electric-potential" }
-Number                      Dishwasher_Startup              { channel="dirigera:smart-plug:myhome:dishwasher:startup" }
-Number                      Dishwasher_OTA_Status           { channel="dirigera:smart-plug:myhome:dishwasher:ota-status" }
-Number                      Dishwasher_OTA_State            { channel="dirigera:smart-plug:myhome:dishwasher:ota-state" }
-Number                      Dishwasher_OTA_Progress         { channel="dirigera:smart-plug:myhome:dishwasher:ota-progress" }
+Switch                      Dishwasher_Power_State      { channel="dirigera:smart-plug:myhome:dishwasher:power" }
+Switch                      Dishwasher_Child_lock       { channel="dirigera:smart-plug:myhome:dishwasher:child-lock" }
+Switch                      Dishwasher_Disable_Light    { channel="dirigera:smart-plug:myhome:dishwasher:disable-light" }
+Number:Power                Dishwasher_Power            { channel="dirigera:smart-plug:myhome:dishwasher:electric-power" }
+Number:Energy               Dishwasher_Energy_Total     { channel="dirigera:smart-plug:myhome:dishwasher:energy-total" }
+Number:Energy               Dishwasher_Energy_Reset     { channel="dirigera:smart-plug:myhome:dishwasher:energy-reset" }
+Number:ElectricCurrent      Dishwasher_Ampere           { channel="dirigera:smart-plug:myhome:dishwasher:electric-current" }
+Number:ElectricPotential    Dishwasher_Voltage          { channel="dirigera:smart-plug:myhome:dishwasher:electric-potential" }
+Number                      Dishwasher_Startup          { channel="dirigera:smart-plug:myhome:dishwasher:startup" }
+Number                      Dishwasher_OTA_Status       { channel="dirigera:smart-plug:myhome:dishwasher:ota-status" }
+Number                      Dishwasher_OTA_State        { channel="dirigera:smart-plug:myhome:dishwasher:ota-state" }
+Number                      Dishwasher_OTA_Progress     { channel="dirigera:smart-plug:myhome:dishwasher:ota-progress" }
 ```
 
 ### Rule Examples
@@ -708,7 +836,7 @@ end
 
 #### Motion Sensor Rules
 
-Change the active duration time 
+Change the active duration time
 
 ```java
 rule "Sensor configuration"
@@ -722,7 +850,6 @@ then
     Bedroom_Motion_Active_Duration.sendCommand("3 min")
 end
 ```
-
 
 ## Credits
 
